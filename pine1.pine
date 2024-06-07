@@ -1,0 +1,23 @@
+//@version=5
+strategy("Simple MA Crossover", overlay=true)
+
+// Define the long and short moving averages
+longMa = ta.sma(close, 50)
+shortMa = ta.sma(close, 20)
+
+// Plot the moving averages on the chart
+plot(longMa, color=color.red)
+plot(shortMa, color=color.green)
+
+// Generate buy and sell signals based on crossovers
+longCondition = ta.crossover(shortMa, longMa)
+shortCondition = ta.crossunder(shortMa, longMa)
+
+// Execute the strategy
+if (longCondition)
+    strategy.entry("Long", strategy.long)
+    strategy.close("Short") // Close Short position if Long condition is met
+
+if (shortCondition)
+    strategy.entry("Short", strategy.short)
+    strategy.close("Long") // Close Long position if Short condition is met
